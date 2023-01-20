@@ -6,7 +6,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RecipeDetailScreen} from './src/navigation/Screens/RecipeDetailScreen';
 import {NavigationContainer} from '@react-navigation/native';
 
-import SplashScreen from './src/navigation/Screens/SplashScreen';
+//import SplashScreen from './src/navigation/Screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -14,11 +14,11 @@ export default function App() {
         <NativeBaseProvider>
             <NavigationContainer>
                 <Stack.Navigator>
-                    <Stack.Screen
-                        options={{headerShown: false}}
-                        name="Splash"
-                        component={SplashScreen}
-                    />
+                    {/*<Stack.Screen*/}
+                    {/*    options={{headerShown: false}}*/}
+                    {/*    name="Splash"*/}
+                    {/*    component={SplashScreen}*/}
+                    {/*/>*/}
                     <Stack.Screen
                         name={'MainContainer'}
                         component={MainContainer}

@@ -1,11 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Box, Button, Container, Flex, Heading, HStack, Row, Stack, Text, View} from "native-base";
+import {Box, Button, Heading, Text} from "native-base";
 import {useEffect, useState} from "react";
 import {LoadingSpinner} from "../../Components/LoadingSpinner";
 import {api} from "../../API/api";
-import moment from "moment";
 import {FlatList} from "react-native";
-import ListItem from "native-base/src/components/primitives/List/ListItem";
 
 export const RecipeDetailScreen = ({route, navigation}) => {
     const {slug} = route.params;
@@ -69,21 +67,21 @@ export const RecipeDetailScreen = ({route, navigation}) => {
         getRecipeDetail();
     }, [slug])
 
-    // useEffect(()=>{
-    //     //     const checkIfRecipeIsSaved = async () => {
-    //     //         try {
-    //     //             const recipeString = await AsyncStorage.getItem(id);
-    //     //             if (recipeString) {
-    //     //                 return true;
-    //     //             } else {
-    //     //                 return false;
-    //     //             }
-    //     //         } catch (e) {
-    //     //             console.log(e)
-    //     //         }
-    //     //     }
-    //     //     checkIfRecipeIsSaved().then(result => setIsSaved(result))
-    //     // },[id])
+    useEffect(()=>{
+            const checkIfRecipeIsSaved = async () => {
+                try {
+                    const recipeString = await AsyncStorage.getItem(id);
+                    if (recipeString) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (e) {
+                    console.log(e)
+                }
+            }
+            checkIfRecipeIsSaved().then(result => setIsSaved(result))
+        },[id])
 
 
     if (isLoading) {
@@ -92,46 +90,43 @@ export const RecipeDetailScreen = ({route, navigation}) => {
     if (error) {
         return <Text>{error}</Text>
     }
-    const formatDate = (date) => {
-        date = moment(date);
-        return (date.format("DD-MM-YYYY"));
-    }
 
-    // const addToFavorites = async () => {
-    //     try {
-    //         await console.log('adding')
-    //         await AsyncStorage.setItem(id, JSON.stringify(recipe));
-    //         await setIsSaved(true);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-    //
-    // const removeFromFavorites = async () => {
-    //     try {
-    //         setIsSaved(false);
-    //         await AsyncStorage.removeItem(id);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-    //
-    //
-    // {isSaved ? (
-    //     <Button size="sm" onPress={() => removeFromFavorites()}>
-    //         Remove from Favorites
-    //     </Button>
-    // ) : (
-    //     <Button size="sm" onPress={() => addToFavorites()}>
-    //         Add To Favorites
-    //     </Button>
-    // )}
+
+    const addToFavorites = async () => {
+        try {
+            await console.log('adding')
+            await AsyncStorage.setItem(id, JSON.stringify(recipe));
+            await setIsSaved(true);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const removeFromFavorites = async () => {
+        try {
+            setIsSaved(false);
+            await AsyncStorage.removeItem(id);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
+
 
 
     return (
         <Box p={2}>
             <Heading color="emerald.500">{title}</Heading>
-
+            {isSaved ? (
+                <Button size="sm" onPress={() => removeFromFavorites()}>
+                    Remove from Favorites
+                </Button>
+            ) : (
+                <Button size="sm" onPress={() => addToFavorites()}>
+                    Add To Favorites
+                </Button>
+            )}
             <Text>počet porcií: {servingCount !== undefined ? servingCount : '0'}</Text>
             <Text>Príloha: {sideDish !== undefined ? sideDish : 'neuvedené'}</Text>
             <Text>Doba
